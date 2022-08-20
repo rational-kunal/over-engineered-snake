@@ -1,7 +1,8 @@
 import { Entity } from '../framework/Entity';
 import { makeFrame } from '../framework/Frame';
 import { EntityController } from '../framework/EntityController';
-import { Direction } from './util';
+import { Direction, mod } from './util';
+import { shared } from '../core/shared';
 
 const SNAKE_ENTITY_SIZE = 10;
 
@@ -36,9 +37,11 @@ SnakeEntityController.prototype.update = function () {
   deltaInXYForDirection[Direction.down] = [0, SNAKE_ENTITY_SIZE];
   deltaInXYForDirection[Direction.right] = [SNAKE_ENTITY_SIZE, 0];
 
-  const [deltaX, deltaY] = deltaInXYForDirection[this.direction];
-  const newHeadX = this.snakeHeadEntity.frame.x + deltaX;
-  const newHeadY = this.snakeHeadEntity.frame.y + deltaY;
+  const worldFrame = shared.engine.getWorldFrame();
+  const [dx, dy] = deltaInXYForDirection[this.direction];
+  const newHeadX = mod(this.snakeHeadEntity.frame.x + dx, worldFrame.width);
+  const newHeadY = mod(this.snakeHeadEntity.frame.y + dy, worldFrame.height);
+
   const newSnakeHeadEntity = new SnakeEntity(newHeadX, newHeadY);
   this.snakeEntities.shift();
   this.snakeEntities.push(newSnakeHeadEntity);
