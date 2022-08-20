@@ -1,8 +1,8 @@
-import { Engine } from './Engine';
-import { EngineDelegate } from './EngineDelegate';
-import { Entity, makeFrame } from './Entity';
-import { EntityController } from './EntityController';
-import { shared } from './shared';
+import { Engine } from './core/Engine';
+import { EngineDelegate } from './core/EngineDelegate';
+import { Entity, makeFrame } from './framework/Entity';
+import { EntityController } from './framework/EntityController';
+import { shared } from './core/shared';
 
 // HACK: Dummy Entity Controller ===========
 class DummyEntityController extends EntityController {
@@ -22,6 +22,9 @@ const FPS = 1;
 const rootEntityController = new DummyEntityController();
 const engineDelegate = new EngineDelegate(rootEntityController);
 const snakeGameEngine = new Engine(engineDelegate, FPS);
+
+// TODO: Populate shared in the core library
+// TODO: Better way than shared ??
 shared.engine = snakeGameEngine;
 shared.renderingContext = document.getElementById('game-root').getContext('2d');
 

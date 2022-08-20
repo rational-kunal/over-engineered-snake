@@ -1,4 +1,4 @@
-import { shared } from './shared';
+import { shared } from '../core/shared';
 
 export class Frame {
   constructor(x = 0, y = 0, width = 0, height = 0) {

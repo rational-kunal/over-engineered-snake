@@ -1,4 +1,4 @@
-import { makeFrame } from './Entity';
+import { makeFrame } from '../framework/Entity';
 import { shared } from './shared';
 
 export class EngineDelegate {
