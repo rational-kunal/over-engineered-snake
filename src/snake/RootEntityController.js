@@ -10,3 +10,8 @@ export class RootEntityController extends EntityController {
     this.entity.addSubEntity(this.snakeEntityController.entity);
   }
 }
+
+RootEntityController.prototype.didKeyDown = function (key) {
+  // Pass user kbd inputs to snake controller to change direction of snake accordingly
+  this.snakeEntityController.didKeyDown(key);
+};

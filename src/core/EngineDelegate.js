@@ -15,6 +15,10 @@ EngineDelegate.prototype.didKeyDown = function (engine, keyEvent) {
   if (keyEvent.key === ' ') {
     engine.paused ? engine.play() : engine.pause();
   }
+
+  if (!engine.paused) {
+    this.rootEntityController.didKeyDown(keyEvent.key);
+  }
 };
 
 EngineDelegate.prototype.loop = function () {

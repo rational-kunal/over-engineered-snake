@@ -13,6 +13,11 @@ EntityController.prototype.addChildEntityController = function (
   this.childEntityControllers.push(childEntityController);
 };
 
+EntityController.prototype.didKeyDown = function (key) {
+  // Should be overridden in sub class
+  // This event should be passed only to controllers that need it
+};
+
 EntityController.prototype.update = function () {
   this.childEntityControllers.forEach((ec) => ec.update());
 };
