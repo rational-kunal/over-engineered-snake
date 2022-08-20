@@ -1,4 +1,5 @@
-import { Entity, makeFrame } from '../framework/Entity';
+import { Entity } from '../framework/Entity';
+import { makeFrame } from '../framework/Frame';
 import { EntityController } from '../framework/EntityController';
 import { Direction } from './util';
 

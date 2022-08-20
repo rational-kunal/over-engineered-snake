@@ -1,13 +1,14 @@
 import { Engine } from './core/Engine';
-import { EngineDelegate } from './core/EngineDelegate';
 import { shared } from './core/shared';
 import { RootEntityController } from './snake/RootEntityController';
 
 const FPS = 1;
+const GAME_SIZE = { width: 500, height: 500 };
 
 const rootEntityController = new RootEntityController();
-const engineDelegate = new EngineDelegate(rootEntityController);
-const snakeGameEngine = new Engine(engineDelegate, FPS);
+const snakeGameEngine = new Engine(rootEntityController, {
+  fps: FPS,
+});
 
 // TODO: Populate shared in the core library
 // TODO: Better way than shared ??
