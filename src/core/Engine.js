@@ -2,7 +2,7 @@ import { shared } from './shared';
 import { makeFrame } from '../framework/Frame';
 
 export class Engine {
-  constructor(rootEntityController, { fps }) {
+  constructor(rootEntityController, fps) {
     this.rootEntityController = rootEntityController;
     this.fps = fps;
   }
@@ -47,11 +47,15 @@ Engine.prototype.loop = function () {
   }
 };
 
+Engine.prototype.getWorldFrame = function () {
+  // We are not storing this values since they can be changed at runtime
+  const canvasEl = shared.renderingContext.canvas;
+  return makeFrame(0, 0, canvasEl.width, canvasEl.height);
+};
+
 Engine.prototype._tick = function () {
   // Clear the whole canvas first
-  const canvasEl = shared.renderingContext.canvas;
-  const rootFrame = makeFrame(0, 0, canvasEl.width, canvasEl.height);
-  shared.renderingContext.clearRect(...rootFrame.param);
+  shared.renderingContext.clearRect(...this.getWorldFrame().param);
 
   // Update the Entity Controller
   this.rootEntityController.update();
