@@ -29,10 +29,6 @@ export class Entity {
   }
 }
 
-Entity.prototype.addSubEntity = function (subEntity) {
-  this.subEntities.push(subEntity);
-};
-
 Entity.prototype.draw = function () {
   if (!this.frame.isEmpty) {
     shared.renderingContext.fillRect(...this.frame.param);

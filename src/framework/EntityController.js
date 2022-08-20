@@ -7,12 +7,6 @@ export class EntityController {
   }
 }
 
-EntityController.prototype.addChildEntityController = function (
-  childEntityController
-) {
-  this.childEntityControllers.push(childEntityController);
-};
-
 EntityController.prototype.didKeyDown = function (key) {
   // Should be overridden in sub class
   // This event should be passed only to controllers that need it

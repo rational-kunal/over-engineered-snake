@@ -6,8 +6,8 @@ export class RootEntityController extends EntityController {
     super();
 
     this.snakeEntityController = new SnakeEntityController();
-    this.addChildEntityController(this.snakeEntityController);
-    this.entity.addSubEntity(this.snakeEntityController.entity);
+    this.childEntityControllers.push(this.snakeEntityController);
+    this.entity.subEntities.push(this.snakeEntityController.entity);
   }
 }
 
