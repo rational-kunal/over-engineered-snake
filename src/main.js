@@ -1,25 +1,11 @@
 import { Engine } from './core/Engine';
 import { EngineDelegate } from './core/EngineDelegate';
-import { Entity, makeFrame } from './framework/Entity';
-import { EntityController } from './framework/EntityController';
 import { shared } from './core/shared';
-
-// HACK: Dummy Entity Controller ===========
-class DummyEntityController extends EntityController {
-  constructor() {
-    super();
-    this.entity = new Entity(makeFrame(0, 0, 10, 10));
-  }
-
-  update() {
-    this.entity.frame.x += 1;
-  }
-}
-// END HACK: Dummy Entity Controller =======
+import { RootEntityController } from './snake/RootEntityController';
 
 const FPS = 1;
 
-const rootEntityController = new DummyEntityController();
+const rootEntityController = new RootEntityController();
 const engineDelegate = new EngineDelegate(rootEntityController);
 const snakeGameEngine = new Engine(engineDelegate, FPS);
 

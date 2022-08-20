@@ -11,6 +11,10 @@ export class Frame {
   get param() {
     return [this.x, this.y, this.width, this.height];
   }
+
+  get isEmpty() {
+    return this.width === 0 || this.height === 0;
+  }
 }
 
 export const makeFrame = (x, y, width, height) =>
@@ -21,9 +25,19 @@ export const ZERO_FRAME = new Frame();
 export class Entity {
   constructor(frame = ZERO_FRAME) {
     this.frame = frame;
+    this.subEntities = [];
   }
 }
 
+Entity.prototype.addSubEntity = function (subEntity) {
+  this.subEntities.push(subEntity);
+};
+
 Entity.prototype.draw = function () {
-  shared.renderingContext.fillRect(...this.frame.param);
+  if (!this.frame.isEmpty) {
+    shared.renderingContext.fillRect(...this.frame.param);
+  }
+
+  // Draw sub-entities
+  this.subEntities.forEach((e) => e.draw());
 };
