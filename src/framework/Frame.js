@@ -15,6 +15,10 @@ export class Frame {
   }
 }
 
+Frame.prototype.toString = function () {
+  return `{x: ${this.x}, y: ${this.y}, width: ${this.width}, height: ${this.height}}`;
+};
+
 // 🚧 DO NOT USE: SCALABLE COLLISION DETECTION LOGIC IS IN PROGRESS 🚧
 Frame.prototype._IN_DEVELOPMENT_canCollideWith = function (withFrame) {
   const extrapolateToPoints = (f) => [f.x, f.y, f.x + f.width, f.y + f.height];
