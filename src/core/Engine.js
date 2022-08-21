@@ -2,8 +2,9 @@ import { shared } from './shared';
 import { detectCollision, Frame, makeFrame } from '../framework/Frame';
 
 export class Engine {
-  constructor(rootEntityController, fps) {
-    this.rootEntityController = rootEntityController;
+  constructor(RootEntityControllerClass, fps) {
+    this.RootEntityControllerClass = RootEntityControllerClass;
+    this.rootEntityController = new this.RootEntityControllerClass();
     this.fps = fps;
   }
 }
@@ -30,6 +31,11 @@ Engine.prototype.play = function () {
 
   // Trigger loop
   window.requestAnimationFrame(() => this.loop());
+};
+
+Engine.prototype.reset = function () {
+  console.assert(this.paused, 'Engine should be paused first to rest');
+  this.rootEntityController = new this.RootEntityControllerClass();
 };
 
 Engine.prototype.loop = function () {

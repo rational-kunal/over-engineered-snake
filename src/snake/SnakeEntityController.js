@@ -83,6 +83,7 @@ SnakeEntityController.prototype._snakeEntityDidCollide = function (entity) {
   if (entity.type === POWER_ENTITY_TYPE) {
     this.powerUp = true; // Power up in next update
   } else if (entity.type === SNAKE_ENTITY_TYPE) {
-    // TODO: GAME OVER
+    shared.engine.pause();
+    shared.engine.reset();
   }
 };

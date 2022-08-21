@@ -4,8 +4,7 @@ import { RootEntityController } from './snake/RootEntityController';
 
 const FPS = 1;
 
-const rootEntityController = new RootEntityController();
-const snakeGameEngine = new Engine(rootEntityController, FPS);
+const snakeGameEngine = new Engine(RootEntityController, FPS);
 
 // TODO: Populate shared in the core library
 // TODO: Better way than shared ??
