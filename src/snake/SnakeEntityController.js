@@ -5,10 +5,13 @@ import { Direction, mod } from './util';
 import { shared } from '../core/shared';
 
 const SNAKE_ENTITY_SIZE = 10;
+const SNAKE_ENTITY_TYPE = 'SNAKE_ENTITY_TYPE';
 
 class SnakeEntity extends Entity {
   constructor(x, y) {
     super(makeFrame(x, y, SNAKE_ENTITY_SIZE, SNAKE_ENTITY_SIZE));
+    this.collidable = true;
+    this.type = SNAKE_ENTITY_TYPE;
   }
 }
 
@@ -19,8 +22,10 @@ export class SnakeEntityController extends EntityController {
       new SnakeEntity(0, 0),
       new SnakeEntity(10, 0),
       new SnakeEntity(20, 0),
+      new SnakeEntity(30, 0),
+      new SnakeEntity(40, 0),
     ];
-    this.snakeHeadEntity = this.snakeEntities[2];
+    this.snakeHeadEntity = this.snakeEntities[4];
     this.entity.subEntities = this.snakeEntities;
     this.direction = Direction.none;
   }

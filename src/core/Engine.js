@@ -1,5 +1,5 @@
 import { shared } from './shared';
-import { makeFrame } from '../framework/Frame';
+import { detectCollision, Frame, makeFrame } from '../framework/Frame';
 
 export class Engine {
   constructor(rootEntityController, fps) {
@@ -62,6 +62,10 @@ Engine.prototype._tick = function () {
 
   // Draw the root Entity
   this.rootEntityController.entity.draw();
+
+  // Detect collision and forward if any
+  // This is a costly operation which involves risky recursive code
+  this._detectCollisionAndForward();
 };
 
 Engine.prototype._didKeyDown = function ({ key }) {
@@ -73,4 +77,56 @@ Engine.prototype._didKeyDown = function ({ key }) {
   if (!this.paused) {
     this.rootEntityController.didKeyDown(key);
   }
+};
+
+/**
+ * Returns true if target frame will collide with any of the entities in hierarchy
+ * @param {Frame} targetFrame
+ * @returns boolean
+ */
+Engine.prototype.willAnyEntityCollideWith = function (targetFrame) {
+  // TODO: Can be improved by returning early if we found any collisions
+  return this._collidingEntitiesWithFrame(targetFrame) > 0;
+};
+
+Engine.prototype._collidingEntitiesWithFrame = function (targetFrame) {
+  const collidingEntities = new Set();
+  const recursivelyDetectCollision = (withEntity) => {
+    if (
+      withEntity.collidable &&
+      !withEntity.frame.isEmpty &&
+      detectCollision(targetFrame, withEntity.frame)
+    ) {
+      collidingEntities.add(withEntity);
+    }
+
+    withEntity.subEntities.forEach((subEntity) =>
+      recursivelyDetectCollision(subEntity)
+    );
+
+    return collidingEntities;
+  };
+
+  return recursivelyDetectCollision(this.rootEntityController.entity);
+};
+
+Engine.prototype._detectCollisionAndForward = function () {
+  // TODO: Faster collision detection and forward with cached flat maps ??
+  const recursivelyDetectCollision = (forEntity) => {
+    const collidingEntities = this._collidingEntitiesWithFrame(forEntity.frame);
+    collidingEntities.delete(forEntity);
+
+    for (const collidingEntity of collidingEntities) {
+      console.info(
+        `Collision detected between ${forEntity} and ${collidingEntity}`
+      );
+      forEntity.didCollideWith(collidingEntity);
+    }
+
+    for (const subEntity of forEntity.subEntities) {
+      recursivelyDetectCollision(subEntity);
+    }
+  };
+
+  recursivelyDetectCollision(this.rootEntityController.entity);
 };
