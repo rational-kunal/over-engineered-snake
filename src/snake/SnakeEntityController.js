@@ -1,16 +1,16 @@
-import { Entity } from '../framework/Entity';
 import { makeFrame } from '../framework/Frame';
 import { EntityController } from '../framework/EntityController';
 import { Direction, mod } from './util';
 import { shared } from '../core/shared';
+import { POWER_ENTITY_TYPE } from './PowersEntityController';
+import { CollidableEntity } from '../framework/CollidableEntity';
 
+export const SNAKE_ENTITY_TYPE = 'SNAKE_ENTITY_TYPE';
 const SNAKE_ENTITY_SIZE = 10;
-const SNAKE_ENTITY_TYPE = 'SNAKE_ENTITY_TYPE';
 
-class SnakeEntity extends Entity {
+class SnakeEntity extends CollidableEntity {
   constructor(x, y) {
     super(makeFrame(x, y, SNAKE_ENTITY_SIZE, SNAKE_ENTITY_SIZE));
-    this.collidable = true;
     this.type = SNAKE_ENTITY_TYPE;
   }
 }
@@ -18,16 +18,11 @@ class SnakeEntity extends Entity {
 export class SnakeEntityController extends EntityController {
   constructor() {
     super();
-    this.snakeEntities = [
-      new SnakeEntity(0, 0),
-      new SnakeEntity(10, 0),
-      new SnakeEntity(20, 0),
-      new SnakeEntity(30, 0),
-      new SnakeEntity(40, 0),
-    ];
-    this.snakeHeadEntity = this.snakeEntities[4];
+    this.snakeEntities = [this._createSnakeEntity(0, 0)];
+    this.snakeHeadEntity = this.snakeEntities[0];
     this.entity.subEntities = this.snakeEntities;
     this.direction = Direction.none;
+    this.powerUp = false;
   }
 }
 
@@ -47,10 +42,19 @@ SnakeEntityController.prototype.update = function () {
   const newHeadX = mod(this.snakeHeadEntity.frame.x + dx, worldFrame.width);
   const newHeadY = mod(this.snakeHeadEntity.frame.y + dy, worldFrame.height);
 
-  const newSnakeHeadEntity = new SnakeEntity(newHeadX, newHeadY);
-  this.snakeEntities.shift();
-  this.snakeEntities.push(newSnakeHeadEntity);
-  this.snakeHeadEntity = newSnakeHeadEntity;
+  if (this.powerUp) {
+    const newSnakeHeadEntity = this._createSnakeEntity(newHeadX, newHeadY);
+    this.snakeEntities.push(newSnakeHeadEntity);
+    this.snakeHeadEntity = newSnakeHeadEntity;
+
+    this.powerUp = false;
+  } else {
+    const snakeHeadEntity = this.snakeEntities.shift();
+    snakeHeadEntity.frame.x = newHeadX;
+    snakeHeadEntity.frame.y = newHeadY;
+    this.snakeEntities.push(snakeHeadEntity);
+    this.snakeHeadEntity = snakeHeadEntity;
+  }
 };
 
 SnakeEntityController.prototype.didKeyDown = function (key) {
@@ -64,5 +68,21 @@ SnakeEntityController.prototype.didKeyDown = function (key) {
   if (key in changeDirectionForKeyCallbacks) {
     changeDirectionForKeyCallbacks[key]();
     console.info(`Snake direction changed to ${this.direction}`);
+  }
+};
+
+SnakeEntityController.prototype._createSnakeEntity = function (x, y) {
+  const snakeEntity = new SnakeEntity(x, y);
+  snakeEntity.collisionCallback = (otherEntity) => {
+    this._snakeEntityDidCollide(otherEntity);
+  };
+  return snakeEntity;
+};
+
+SnakeEntityController.prototype._snakeEntityDidCollide = function (entity) {
+  if (entity.type === POWER_ENTITY_TYPE) {
+    this.powerUp = true; // Power up in next update
+  } else if (entity.type === SNAKE_ENTITY_TYPE) {
+    // TODO: GAME OVER
   }
 };

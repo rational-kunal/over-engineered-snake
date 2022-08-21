@@ -6,8 +6,14 @@ export class Entity {
     this.frame = frame;
     this.subEntities = [];
     this.collidable = false;
+    this.type = undefined;
   }
 }
+
+Entity.prototype.toString = function () {
+  if (this.type) return `[Entity ${this.type} ${this.frame}]`;
+  return `[Entity ${this.frame}]`;
+};
 
 Entity.prototype.draw = function () {
   if (!this.frame.isEmpty) {
