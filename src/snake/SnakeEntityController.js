@@ -59,10 +59,18 @@ SnakeEntityController.prototype.update = function () {
 
 SnakeEntityController.prototype.didKeyDown = function (key) {
   const changeDirectionForKeyCallbacks = {
-    w: () => (this.direction = Direction.up),
-    a: () => (this.direction = Direction.left),
-    s: () => (this.direction = Direction.down),
-    d: () => (this.direction = Direction.right),
+    w: () =>
+      (this.direction =
+        this.direction === Direction.down ? Direction.down : Direction.up),
+    a: () =>
+      (this.direction =
+        this.direction === Direction.right ? Direction.right : Direction.left),
+    s: () =>
+      (this.direction =
+        this.direction === Direction.up ? Direction.up : Direction.down),
+    d: () =>
+      (this.direction =
+        this.direction === Direction.left ? Direction.left : Direction.right),
   };
 
   if (key in changeDirectionForKeyCallbacks) {
