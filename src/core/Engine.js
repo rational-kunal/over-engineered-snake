@@ -86,7 +86,7 @@ Engine.prototype._didKeyDown = function ({ key }) {
  */
 Engine.prototype.willAnyEntityCollideWith = function (targetFrame) {
   // TODO: Can be improved by returning early if we found any collisions
-  return this._collidingEntitiesWithFrame(targetFrame) > 0;
+  return this._collidingEntitiesWithFrame(targetFrame).size > 0;
 };
 
 Engine.prototype._collidingEntitiesWithFrame = function (targetFrame) {
