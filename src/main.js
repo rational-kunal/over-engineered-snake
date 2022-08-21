@@ -14,3 +14,5 @@ shared.renderingContext = document.getElementById('game-root').getContext('2d');
 
 // TODO: This should be done after body / DOM is loaded
 snakeGameEngine.initialize();
+
+rootEntityController.startGame();
