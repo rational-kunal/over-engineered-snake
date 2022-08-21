@@ -20,7 +20,3 @@ RootEntityController.prototype.didKeyDown = function (key) {
   // Pass user kbd inputs to snake controller to change direction of snake accordingly
   this.snakeEntityController.didKeyDown(key);
 };
-
-RootEntityController.prototype.startGame = function () {
-  this.powerEntityController.addNewPowerEntity();
-};
