@@ -43,8 +43,8 @@ PowersEntityController.prototype._updatePowerEntityFrame = function () {
   let newFrame;
   do {
     newFrame = makeFrame(
-      randomNumber(0, worldFrame.width, POWER_ENTITY_SIZE),
-      randomNumber(0, worldFrame.height, POWER_ENTITY_SIZE),
+      randomNumber(0, worldFrame.width - POWER_ENTITY_SIZE, POWER_ENTITY_SIZE),
+      randomNumber(0, worldFrame.height - POWER_ENTITY_SIZE, POWER_ENTITY_SIZE),
       POWER_ENTITY_SIZE,
       POWER_ENTITY_SIZE
     );
