@@ -1,5 +1,6 @@
 import { shared } from '../core/shared';
 import { CollidableEntity } from '../framework/CollidableEntity';
+import { Color } from '../framework/Color';
 import { EntityController } from '../framework/EntityController';
 import { makeFrame } from '../framework/Frame';
 import { SNAKE_ENTITY_TYPE } from './SnakeEntityController';
@@ -12,6 +13,7 @@ class PowerEntity extends CollidableEntity {
   constructor() {
     super();
     this.type = POWER_ENTITY_TYPE;
+    this.bgColor = Color.yellow;
   }
 }
 

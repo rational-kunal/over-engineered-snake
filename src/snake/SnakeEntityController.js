@@ -4,6 +4,7 @@ import { Direction, mod } from './util';
 import { shared } from '../core/shared';
 import { POWER_ENTITY_TYPE } from './PowersEntityController';
 import { CollidableEntity } from '../framework/CollidableEntity';
+import { Color } from '../framework/Color';
 
 export const SNAKE_ENTITY_TYPE = 'SNAKE_ENTITY_TYPE';
 const SNAKE_ENTITY_SIZE = 10;
@@ -12,6 +13,7 @@ class SnakeEntity extends CollidableEntity {
   constructor(x, y) {
     super(makeFrame(x, y, SNAKE_ENTITY_SIZE, SNAKE_ENTITY_SIZE));
     this.type = SNAKE_ENTITY_TYPE;
+    this.bgColor = Color.red;
   }
 }
 
