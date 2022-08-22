@@ -1,5 +1,6 @@
-import { Frame, ZERO_FRAME } from './Frame';
+import { ZERO_FRAME } from './Frame';
 import { shared } from '../core/shared';
+import { Color } from './Color';
 
 export class Entity {
   constructor(frame = ZERO_FRAME) {
@@ -7,6 +8,7 @@ export class Entity {
     this.subEntities = [];
     this.collidable = false;
     this.type = undefined;
+    this.bgColor = Color.clear;
   }
 }
 
@@ -16,7 +18,8 @@ Entity.prototype.toString = function () {
 };
 
 Entity.prototype.draw = function () {
-  if (!this.frame.isEmpty) {
+  if (!this.frame.isEmpty && this.bgColor !== Color.clear) {
+    shared.renderingContext.fillStyle = this.bgColor;
     shared.renderingContext.fillRect(...this.frame.param);
   }
 
