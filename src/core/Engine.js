@@ -2,7 +2,12 @@ import { shared } from './shared';
 import { detectCollision, Frame, makeFrame } from '../framework/Frame';
 
 export class Engine {
-  constructor(RootEntityControllerClass, fps) {
+  constructor(RootEntityControllerClass, canvasID, fps) {
+    shared.engine = this;
+    shared.renderingContext = document
+      .getElementById(canvasID)
+      .getContext('2d');
+
     this.RootEntityControllerClass = RootEntityControllerClass;
     this.rootEntityController = new this.RootEntityControllerClass();
     this.fps = fps;
@@ -119,19 +124,22 @@ Engine.prototype._collidingEntitiesWithFrame = function (targetFrame) {
 Engine.prototype._detectCollisionAndForward = function () {
   // TODO: Faster collision detection and forward with cached flat maps ??
   const recursivelyDetectCollision = (forEntity) => {
-    const collidingEntities = this._collidingEntitiesWithFrame(forEntity.frame);
-    collidingEntities.delete(forEntity);
-
-    for (const collidingEntity of collidingEntities) {
-      console.info(
-        `Collision detected between ${forEntity} and ${collidingEntity}`
+    if (forEntity.collidable && !forEntity.frame.isEmpty) {
+      const collidingEntities = this._collidingEntitiesWithFrame(
+        forEntity.frame
       );
-      forEntity.didCollideWith(collidingEntity);
+      collidingEntities.delete(forEntity);
+
+      collidingEntities.forEach((collidingEntity) => {
+        console.info(`[collision] between ${forEntity} and ${collidingEntity}`);
+
+        forEntity.didCollideWith(collidingEntity);
+      });
     }
 
-    for (const subEntity of forEntity.subEntities) {
+    forEntity.subEntities.forEach((subEntity) => {
       recursivelyDetectCollision(subEntity);
-    }
+    });
   };
 
   recursivelyDetectCollision(this.rootEntityController.entity);
