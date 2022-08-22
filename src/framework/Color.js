@@ -4,7 +4,7 @@ export const Color = {
   white: 'white',
   yellow: 'yellow',
   red: 'red',
-  gray: 'gray',
+  grey: 'grey',
 
   color: (r, g, b) => `rgb(${r}, ${g}, ${b})`,
 };
