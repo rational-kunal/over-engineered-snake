@@ -23,6 +23,14 @@ Engine.prototype.initialize = function () {
   document.addEventListener('keydown', (event) => {
     this._didKeyDown(event);
   });
+
+  // Load the entities in respective entity controllers
+  walkEntityControllerHierarchy(this.rootEntityController, (ec) => {
+    ec.loadEntity();
+  });
+
+  // Initial draw, next draw will be after update
+  this.rootEntityController.entity.draw();
 };
 
 Engine.prototype.pause = function () {
@@ -144,3 +152,15 @@ Engine.prototype._detectCollisionAndForward = function () {
 
   recursivelyDetectCollision(this.rootEntityController.entity);
 };
+
+function walkEntityControllerHierarchy(entityController, fn) {
+  const recursivelyWalk = (currEntityController) => {
+    fn(currEntityController);
+
+    currEntityController.childEntityControllers.forEach((child) => {
+      recursivelyWalk(child);
+    });
+  };
+
+  return recursivelyWalk(entityController);
+}

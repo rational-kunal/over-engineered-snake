@@ -20,13 +20,17 @@ class SnakeEntity extends CollidableEntity {
 export class SnakeEntityController extends EntityController {
   constructor() {
     super();
-    this.snakeEntities = [this._createSnakeEntity(0, 0)];
-    this.snakeHeadEntity = this.snakeEntities[0];
     this.entity.subEntities = this.snakeEntities;
     this.direction = Direction.none;
     this.powerUp = false;
   }
 }
+
+SnakeEntityController.prototype.loadEntity = function () {
+  this.snakeEntities = [this._createSnakeEntity(0, 0)];
+  this.snakeHeadEntity = this.snakeEntities[0];
+  this.entity.subEntities = this.snakeEntities;
+};
 
 SnakeEntityController.prototype.update = function () {
   if (this.direction === Direction.none) {

@@ -18,16 +18,20 @@ class PowerEntity extends CollidableEntity {
 }
 
 export class PowersEntityController extends EntityController {
+  shouldAddPower = true;
   constructor() {
     super();
-    this.powerEntity = new PowerEntity();
-    this.powerEntity.collisionCallback = (otherEntity) => {
-      this._powerEntityDidCollide(otherEntity);
-    };
-    this.entity.subEntities = [this.powerEntity];
     this.shouldAddPower = true;
   }
 }
+
+PowersEntityController.prototype.loadEntity = function () {
+  this.powerEntity = new PowerEntity();
+  this.powerEntity.collisionCallback = (otherEntity) => {
+    this._powerEntityDidCollide(otherEntity);
+  };
+  this.entity.subEntities = [this.powerEntity];
+};
 
 PowersEntityController.prototype.update = function () {
   if (this.shouldAddPower) {

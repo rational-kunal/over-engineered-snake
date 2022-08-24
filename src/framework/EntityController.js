@@ -7,6 +7,12 @@ export class EntityController {
   }
 }
 
+/**
+ * Override this to load the entity.
+ * Default implementation is a no-op.
+ */
+EntityController.prototype.loadEntity = function () {};
+
 EntityController.prototype.didKeyDown = function (key) {
   // Should be overridden in sub class
   // This event should be passed only to controllers that need it

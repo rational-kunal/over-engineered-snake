@@ -4,24 +4,22 @@ import { EntityController } from '../framework/EntityController';
 import { PowersEntityController } from './PowersEntityController';
 import { SnakeEntityController } from './SnakeEntityController';
 
-export class RootEntityController extends EntityController {
-  constructor() {
-    super();
+export class RootEntityController extends EntityController {}
 
-    const worldFrame = shared.engine.getWorldFrame();
-    this.entity.frame.width = worldFrame.width;
-    this.entity.frame.height = worldFrame.height;
-    this.entity.bgColor = Color.grey;
+RootEntityController.prototype.loadEntity = function () {
+  const worldFrame = shared.engine.getWorldFrame();
+  this.entity.frame.width = worldFrame.width;
+  this.entity.frame.height = worldFrame.height;
+  this.entity.bgColor = Color.grey;
 
-    this.powerEntityController = new PowersEntityController();
-    this.childEntityControllers.push(this.powerEntityController);
-    this.entity.subEntities.push(this.powerEntityController.entity);
+  this.powerEntityController = new PowersEntityController();
+  this.childEntityControllers.push(this.powerEntityController);
+  this.entity.subEntities.push(this.powerEntityController.entity);
 
-    this.snakeEntityController = new SnakeEntityController();
-    this.childEntityControllers.push(this.snakeEntityController);
-    this.entity.subEntities.push(this.snakeEntityController.entity);
-  }
-}
+  this.snakeEntityController = new SnakeEntityController();
+  this.childEntityControllers.push(this.snakeEntityController);
+  this.entity.subEntities.push(this.snakeEntityController.entity);
+};
 
 RootEntityController.prototype.didKeyDown = function (key) {
   // Pass user kbd inputs to snake controller to change direction of snake accordingly
