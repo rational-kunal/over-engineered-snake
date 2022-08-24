@@ -39,7 +39,7 @@ Frame.prototype._IN_DEVELOPMENT_canCollideWith = function (withFrame) {
 export const makeFrame = (x, y, width, height) =>
   new Frame(x, y, width, height);
 
-export const ZERO_FRAME = new Frame();
+export const makeZeroFrame = () => makeFrame(0, 0, 0, 0);
 
 /**
  * 🚧 DO NOT USE: SCALABLE COLLISION DETECTION LOGIC IS IN PROGRESS 🚧

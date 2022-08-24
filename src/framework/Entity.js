@@ -1,9 +1,9 @@
-import { ZERO_FRAME } from './Frame';
+import { makeZeroFrame } from './Frame';
 import { shared } from '../core/shared';
 import { Color } from './Color';
 
 export class Entity {
-  constructor(frame = ZERO_FRAME) {
+  constructor(frame = makeZeroFrame()) {
     this.frame = frame;
     this.subEntities = [];
     this.collidable = false;
