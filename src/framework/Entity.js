@@ -2,19 +2,28 @@ import { makeZeroFrame } from './Frame';
 import { shared } from '../core/shared';
 import { Color } from './Color';
 
+const UNKNOWN_ENTITY_TYPE = 'UNKNOWN_ENTITY_TYPE';
+
 export class Entity {
+  /** Whether this entity should be collidable or not. */
+  collidable = false;
+
+  /** Type of the entity */
+  type = UNKNOWN_ENTITY_TYPE;
+
+  /** Sub entities present under this entity */
+  subEntities = [];
+
+  /** Background color */
+  bgColor = Color.clear;
+
   constructor(frame = makeZeroFrame()) {
     this.frame = frame;
-    this.subEntities = [];
-    this.collidable = false;
-    this.type = undefined;
-    this.bgColor = Color.clear;
   }
 }
 
 Entity.prototype.toString = function () {
-  if (this.type) return `[Entity ${this.type} ${this.frame}]`;
-  return `[Entity ${this.frame}]`;
+  return `[${this.type} ${this.frame}]`;
 };
 
 Entity.prototype.draw = function () {

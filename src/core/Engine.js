@@ -9,20 +9,19 @@ export class Engine {
       .getContext('2d');
 
     this.RootEntityControllerClass = RootEntityControllerClass;
-    this.rootEntityController = new this.RootEntityControllerClass();
     this.fps = fps;
+
+    this._addEventListeners();
   }
 }
 
 Engine.prototype.initialize = function () {
+  this.rootEntityController = new this.RootEntityControllerClass();
+
   this.paused = true; // Initially engine is in paused state
+  this.didGameOver = false;
   this.fpsInterval = 1000 / this.fps;
   this.then = Date.now();
-
-  // Add key press event listener
-  document.addEventListener('keydown', (event) => {
-    this._didKeyDown(event);
-  });
 
   // Load the entities in respective entity controllers
   walkEntityControllerHierarchy(this.rootEntityController, (ec) => {
@@ -34,21 +33,36 @@ Engine.prototype.initialize = function () {
 };
 
 Engine.prototype.pause = function () {
-  console.info('Engine paused'); // Will pause after one loop
+  console.info('[engine] paused'); // Will pause after one loop
   this.paused = true;
 };
 
 Engine.prototype.play = function () {
-  console.info('Engine started');
-  this.paused = false;
+  if (this.didGameOver) {
+    this.reset();
+  } else {
+    console.info('[engine] started');
+    this.paused = false;
 
-  // Trigger loop
-  window.requestAnimationFrame(() => this.loop());
+    // Trigger loop
+    window.requestAnimationFrame(() => this.loop());
+  }
+};
+
+Engine.prototype.gameOver = function () {
+  console.info('[engine] game over');
+  this.didGameOver = true;
 };
 
 Engine.prototype.reset = function () {
   console.assert(this.paused, 'Engine should be paused first to rest');
-  this.rootEntityController = new this.RootEntityControllerClass();
+  console.info('[engine] reset');
+
+  // Re-initialize engine
+  this.initialize();
+
+  // Start the game immediately
+  this.play();
 };
 
 Engine.prototype.loop = function () {
@@ -87,6 +101,13 @@ Engine.prototype._tick = function () {
   this._detectCollisionAndForward();
 };
 
+Engine.prototype._addEventListeners = function () {
+  // Add key press event listener
+  document.addEventListener('keydown', (event) => {
+    this._didKeyDown(event);
+  });
+};
+
 Engine.prototype._didKeyDown = function ({ key }) {
   // TODO: Higher level play-pause
   if (key === ' ') {
@@ -110,47 +131,33 @@ Engine.prototype.willAnyEntityCollideWith = function (targetFrame) {
 
 Engine.prototype._collidingEntitiesWithFrame = function (targetFrame) {
   const collidingEntities = new Set();
-  const recursivelyDetectCollision = (withEntity) => {
+  walkEntityHierarchy(this.rootEntityController.entity, (entity) => {
     if (
-      withEntity.collidable &&
-      !withEntity.frame.isEmpty &&
-      detectCollision(targetFrame, withEntity.frame)
+      entity.collidable &&
+      !entity.frame.isEmpty &&
+      detectCollision(targetFrame, entity.frame)
     ) {
-      collidingEntities.add(withEntity);
+      collidingEntities.add(entity);
     }
+  });
 
-    withEntity.subEntities.forEach((subEntity) =>
-      recursivelyDetectCollision(subEntity)
-    );
-
-    return collidingEntities;
-  };
-
-  return recursivelyDetectCollision(this.rootEntityController.entity);
+  return collidingEntities;
 };
 
 Engine.prototype._detectCollisionAndForward = function () {
   // TODO: Faster collision detection and forward with cached flat maps ??
-  const recursivelyDetectCollision = (forEntity) => {
-    if (forEntity.collidable && !forEntity.frame.isEmpty) {
-      const collidingEntities = this._collidingEntitiesWithFrame(
-        forEntity.frame
-      );
-      collidingEntities.delete(forEntity);
+  walkEntityHierarchy(this.rootEntityController.entity, (entity) => {
+    if (entity.collidable && !entity.frame.isEmpty) {
+      const collidingEntities = this._collidingEntitiesWithFrame(entity.frame);
+      collidingEntities.delete(entity);
 
       collidingEntities.forEach((collidingEntity) => {
-        console.info(`[collision] between ${forEntity} and ${collidingEntity}`);
+        console.info(`[collision] between ${entity} and ${collidingEntity}`);
 
-        forEntity.didCollideWith(collidingEntity);
+        entity.didCollideWith(collidingEntity);
       });
     }
-
-    forEntity.subEntities.forEach((subEntity) => {
-      recursivelyDetectCollision(subEntity);
-    });
-  };
-
-  recursivelyDetectCollision(this.rootEntityController.entity);
+  });
 };
 
 function walkEntityControllerHierarchy(entityController, fn) {
@@ -163,4 +170,16 @@ function walkEntityControllerHierarchy(entityController, fn) {
   };
 
   return recursivelyWalk(entityController);
+}
+
+function walkEntityHierarchy(entity, fn) {
+  const recursiveWalk = (currEntity) => {
+    fn(currEntity);
+
+    currEntity.subEntities.forEach((subEntity) => {
+      recursiveWalk(subEntity);
+    });
+  };
+
+  return recursiveWalk(entity);
 }

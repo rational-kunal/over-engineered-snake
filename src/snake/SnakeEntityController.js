@@ -10,20 +10,16 @@ export const SNAKE_ENTITY_TYPE = 'SNAKE_ENTITY_TYPE';
 const SNAKE_ENTITY_SIZE = 10;
 
 class SnakeEntity extends CollidableEntity {
+  type = SNAKE_ENTITY_TYPE;
+  bgColor = Color.red;
   constructor(x, y) {
     super(makeFrame(x, y, SNAKE_ENTITY_SIZE, SNAKE_ENTITY_SIZE));
-    this.type = SNAKE_ENTITY_TYPE;
-    this.bgColor = Color.red;
   }
 }
 
 export class SnakeEntityController extends EntityController {
-  constructor() {
-    super();
-    this.entity.subEntities = this.snakeEntities;
-    this.direction = Direction.none;
-    this.powerUp = false;
-  }
+  direction = Direction.none;
+  powerUp = false;
 }
 
 SnakeEntityController.prototype.loadEntity = function () {
@@ -81,7 +77,7 @@ SnakeEntityController.prototype.didKeyDown = function (key) {
 
   if (key in changeDirectionForKeyCallbacks) {
     changeDirectionForKeyCallbacks[key]();
-    console.info(`Snake direction changed to ${this.direction}`);
+    console.info(`[snake] direction changed to ${this.direction}`);
   }
 };
 
@@ -98,6 +94,6 @@ SnakeEntityController.prototype._snakeEntityDidCollide = function (entity) {
     this.powerUp = true; // Power up in next update
   } else if (entity.type === SNAKE_ENTITY_TYPE) {
     shared.engine.pause();
-    shared.engine.reset();
+    shared.engine.gameOver();
   }
 };

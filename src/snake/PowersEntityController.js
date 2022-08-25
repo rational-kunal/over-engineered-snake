@@ -10,19 +10,12 @@ export const POWER_ENTITY_TYPE = 'POWER_ENTITY_TYPE';
 const POWER_ENTITY_SIZE = 10;
 
 class PowerEntity extends CollidableEntity {
-  constructor() {
-    super();
-    this.type = POWER_ENTITY_TYPE;
-    this.bgColor = Color.yellow;
-  }
+  type = POWER_ENTITY_TYPE;
+  bgColor = Color.yellow;
 }
 
 export class PowersEntityController extends EntityController {
   shouldAddPower = true;
-  constructor() {
-    super();
-    this.shouldAddPower = true;
-  }
 }
 
 PowersEntityController.prototype.loadEntity = function () {
@@ -35,13 +28,10 @@ PowersEntityController.prototype.loadEntity = function () {
 
 PowersEntityController.prototype.update = function () {
   if (this.shouldAddPower) {
-    this.addNewPowerEntity();
+    // Update frame of existing power entity
+    this._updatePowerEntityFrame();
     this.shouldAddPower = false;
   }
-};
-
-PowersEntityController.prototype.addNewPowerEntity = function () {
-  this.entity = this._updatePowerEntityFrame();
 };
 
 PowersEntityController.prototype._updatePowerEntityFrame = function () {
@@ -56,11 +46,12 @@ PowersEntityController.prototype._updatePowerEntityFrame = function () {
     );
   } while (shared.engine.willAnyEntityCollideWith(newFrame));
 
-  console.info(`New power added at ${newFrame}`);
   this.powerEntity.frame = newFrame;
+  console.info(`[power] added at ${newFrame}`);
 };
 
 PowersEntityController.prototype._powerEntityDidCollide = function (entity) {
+  // If snake ate the power then add power in next update
   if (entity.type === SNAKE_ENTITY_TYPE) {
     this.shouldAddPower = true;
   }

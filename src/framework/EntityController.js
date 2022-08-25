@@ -1,10 +1,11 @@
 import { Entity } from './Entity';
 
 export class EntityController {
-  constructor() {
-    this.entity = new Entity();
-    this.childEntityControllers = [];
-  }
+  /** Root entity directly associated with this Entity Controller */
+  entity = new Entity();
+
+  /** Child entity controller in the hierarchy */
+  childEntityControllers = [];
 }
 
 /**
@@ -14,8 +15,7 @@ export class EntityController {
 EntityController.prototype.loadEntity = function () {};
 
 EntityController.prototype.didKeyDown = function (key) {
-  // Should be overridden in sub class
-  // This event should be passed only to controllers that need it
+  console.error('Override this function in root entity controller');
 };
 
 EntityController.prototype.update = function () {
