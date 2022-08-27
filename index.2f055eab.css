@@ -1,0 +1,2 @@
+@import "https://fonts.googleapis.com/css2?family=Silkscreen&display=swap";*{margin:0;padding:0;font-family:Silkscreen,cursive;font-size:x-large}body{height:100%;width:100%}.container{width:700px;height:100%;margin:auto}.game-dash-container{flex-flow:row;justify-content:flex-end;column-gap:12px;margin-top:24px;display:flex}.game-dash-instructions-container{flex-flow:row;flex-grow:1;column-gap:12px;display:flex}.game-canvas-container{margin-top:24px}
+/*# sourceMappingURL=index.2f055eab.css.map */
