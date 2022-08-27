@@ -4,9 +4,10 @@
   "description": "",
   "source": "src/index.html",
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build",
-    "test": "jest"
+    "start": "parcel ./src/index.html",
+    "prebuild": "shx rm -rf dist/*",
+    "build": "parcel build --public-url ./",
+    "push-gh-pages": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,9 @@
     "@types/jest": "^28.1.7",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
-    "parcel": "^2.7.0"
+    "parcel": "^2.7.0",
+    "push-dir": "^0.4.1",
+    "shx": "^0.3.4"
   },
   "type": "module"
 }
