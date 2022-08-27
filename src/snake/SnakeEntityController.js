@@ -5,13 +5,14 @@ import { shared } from '../core/shared';
 import { POWER_ENTITY_TYPE } from './PowersEntityController';
 import { CollidableEntity } from '../framework/CollidableEntity';
 import { Color } from '../framework/Color';
+import { scoreManager } from './scoreManager';
 
 export const SNAKE_ENTITY_TYPE = 'SNAKE_ENTITY_TYPE';
 const SNAKE_ENTITY_SIZE = 10;
 
 class SnakeEntity extends CollidableEntity {
   type = SNAKE_ENTITY_TYPE;
-  bgColor = Color.red;
+  bgColor = Color.snakeColor;
   constructor(x, y) {
     super(makeFrame(x, y, SNAKE_ENTITY_SIZE, SNAKE_ENTITY_SIZE));
   }
@@ -92,8 +93,10 @@ SnakeEntityController.prototype._createSnakeEntity = function (x, y) {
 SnakeEntityController.prototype._snakeEntityDidCollide = function (entity) {
   if (entity.type === POWER_ENTITY_TYPE) {
     this.powerUp = true; // Power up in next update
+    scoreManager.incrementCurrentScore();
   } else if (entity.type === SNAKE_ENTITY_TYPE) {
     shared.engine.pause();
     shared.engine.gameOver();
+    scoreManager.resetCurrentScore();
   }
 };

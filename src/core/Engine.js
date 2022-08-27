@@ -13,6 +13,12 @@ export class Engine {
 
     this._addEventListeners();
   }
+
+  /** whether the engine should pause in next update */
+  shouldPause = false;
+
+  /** Whether the engine is paused */
+  paused = false;
 }
 
 Engine.prototype.initialize = function () {
@@ -34,7 +40,7 @@ Engine.prototype.initialize = function () {
 
 Engine.prototype.pause = function () {
   console.info('[engine] paused'); // Will pause after one loop
-  this.paused = true;
+  this.shouldPause = true;
 };
 
 Engine.prototype.play = function () {
@@ -87,6 +93,14 @@ Engine.prototype.getWorldFrame = function () {
 };
 
 Engine.prototype._tick = function () {
+  // Do not draw when engine is planning to pause
+  if (this.shouldPause) {
+    this.shouldPause = false;
+    this.paused = true;
+
+    this.rootEntityController.update();
+  }
+
   // Clear the whole canvas first
   shared.renderingContext.clearRect(...this.getWorldFrame().param);
 

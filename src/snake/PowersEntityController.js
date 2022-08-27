@@ -11,7 +11,7 @@ const POWER_ENTITY_SIZE = 10;
 
 class PowerEntity extends CollidableEntity {
   type = POWER_ENTITY_TYPE;
-  bgColor = Color.yellow;
+  bgColor = Color.powerUpColor;
 }
 
 export class PowersEntityController extends EntityController {

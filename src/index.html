@@ -2,16 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Over Engineered Snake</title>
+    <title>🐍 Over Engineered Snake</title>
+    <link rel="stylesheet" href="./style/main.css" />
   </head>
   <body>
-    <h1>🐍🕹️</h1>
-    <subtitle>🚧 WIP 🚧</subtitle>
-    <ul>
-      <li>Use space bar to start the game</li>
-      <li>Use w, a, s, d to move the snake</li>
-    </ul>
-    <canvas id="game-root"></canvas>
+    <div class="container">
+      <div class="game-dash-container">
+        <div class="game-dash-instructions-container">
+          <!-- Game Status -->
+          <div class="font" id="game-dash-status-paused" hidden>paused</div>
+          <div class="font" id="game-dash-status-game-over" hidden>
+            game over
+          </div>
+
+          <!-- Game Instructions  -->
+          <div class="font" id="game-dash-instructions-start-game">
+            <code>space bar</code> to start game
+          </div>
+          <div class="font" id="game-dash-instructions-play-game" hidden>
+            <code>w</code>, <code>a</code>, <code>s</code>, <code>d</code> to
+            move
+          </div>
+        </div>
+
+        <!-- Game Score -->
+        <div class="font" id="game-dash-highscore">HI 0</div>
+        <div class="font" id="game-dash-score">0</div>
+      </div>
+
+      <div class="game-canvas-container">
+        <!-- THE GAME -->
+        <canvas width="700" height="500" id="game-root"></canvas>
+      </div>
+    </div>
+
     <script type="module" src="main.js"></script>
   </body>
 </html>

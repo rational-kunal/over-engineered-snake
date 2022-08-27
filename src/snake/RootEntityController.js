@@ -1,6 +1,7 @@
 import { shared } from '../core/shared';
 import { Color } from '../framework/Color';
 import { EntityController } from '../framework/EntityController';
+import { htmlManager } from './htmlManager';
 import { PowersEntityController } from './PowersEntityController';
 import { SnakeEntityController } from './SnakeEntityController';
 
@@ -10,7 +11,7 @@ RootEntityController.prototype.loadEntity = function () {
   const worldFrame = shared.engine.getWorldFrame();
   this.entity.frame.width = worldFrame.width;
   this.entity.frame.height = worldFrame.height;
-  this.entity.bgColor = Color.grey;
+  this.entity.bgColor = Color.bgColor;
 
   this.powerEntityController = new PowersEntityController();
   this.childEntityControllers.push(this.powerEntityController);
@@ -27,6 +28,10 @@ RootEntityController.prototype.didKeyDown = function (key) {
 };
 
 RootEntityController.prototype.update = function () {
-  this.snakeEntityController.update();
-  this.powerEntityController.update();
+  if (!shared.engine.paused) {
+    this.snakeEntityController.update();
+    this.powerEntityController.update();
+  }
+
+  htmlManager.update();
 };
